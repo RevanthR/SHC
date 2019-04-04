@@ -38,8 +38,16 @@ def grad_descent_runner(points,start_b,start_m,learning_rate,num_iter):
 		b,m=gradient_man(b,m,array(points),learning_rate)
 	return [b,m]	
 
-	
+def run():
+	points = genfromtxt("data.csv", delimiter=",")
+    learning_rate = 0.0001
+    initial_b = 0 # initial y-intercept guess
+    initial_m = 0 # initial slope guess
+    num_iterations = 1000
+    print "Starting gradient descent at b = {0}, m = {1}, error = {2}".format(initial_b, initial_m, compute_error_for_line_given_points(initial_b, initial_m, points))
+    print "Running..."
+    [b, m] = gradient_descent_runner(points, initial_b, initial_m, learning_rate, num_iterations)
+    print "After {0} iterations b = {1}, m = {2}, error = {3}".format(num_iterations, b, m, compute_error_for_line_given_points(b, m, points))
 
-
-
-print(type(x))
+if __name__ == '__main__':
+    run()
