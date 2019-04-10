@@ -5,13 +5,30 @@ f=open("data.txt","r")
 client = boto3.client(service_name='comprehendmedical',region_name='us-east-1')
 text=f.read()
 result= client.detect_entities(Text=text)
-entities =result['Entities'][0]['Category'];
+entities =result['Entities'];
 phi=client.detect_phi(
     Text=text
 )
 
-# for entity in entities:
-#     print(entity,'\n\n')
 
-print(entities)
-# print(phi)
+#---- Doctor Name and Patient Name ---#
+details=phi['Entities']
+dup_name=[]
+for data in details:
+    
+    if data['Type']=="NAME":
+        dup_name.append(data['Text'])
+name=[]
+for x in dup_name:
+    if x not in name:
+        name.append(x)
+print("\nPatient Name: ",name[0],"\n")
+print("Doctor's Name: ",name[1],"\n") 
+# ------------------------------------#
+
+disease=[]
+for entity in entities:
+    if entity['Category']=="MEDICAL_CONDITION" and entity['Text'].lower()=="diabetes" :
+        disease.append(entity['Text'])
+disease=set(disease)
+print("Problems : ",disease,"\n")
