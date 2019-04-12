@@ -3,10 +3,12 @@ import json
 import glob
 import errno
 
-path='*.txt'
+path='input/*.txt'
 files=glob.glob(path)
 
 client = boto3.client(service_name='comprehendmedical',region_name='us-east-1')
+
+outfile=open('result.txt','a')
 
 for name in files:
     with open(name) as f:
@@ -29,8 +31,9 @@ for name in files:
         for x in dup_name:
             if x not in name:
                 name.append(x)
-        print("Patient Name: ",name[0],"\n")
-        print("Doctor's Name: ",name[1],"\n") 
+        outfile.writelines(str("Patient Name: "+name[0]+"\n"))
+        
+        outfile.writelines(str("Doctor's Name: "+name[1]+"\n")) 
         # ------------------------------------#
 
         disease=[]
@@ -39,12 +42,10 @@ for name in files:
                 if entity['Traits'][0]['Name'].lower()=="diagnosis":
                     disease.append(entity['Text'])
         disease=set(disease)
-        print("Problems : ",disease,"\n")
+        outfile.writelines(str("Problems : "+disease+"\n"))
 
         # for entity in entities:
         #     if entity['Category']=="MEDICAL_CONDITION" and len(entity['Traits'])!=0:
         #         if entity['Traits'][0]['Name'].lower()=="diagnosis":
-                
-
-
+outfile.close()
      
