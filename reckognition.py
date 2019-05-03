@@ -4,7 +4,7 @@ import re
 if __name__ == "__main__":
 
     bucket='bucket1io'
-    photo='Ct-scan.png'
+    photo='scan2.png'
     pattern='zea[0-9]'
     client=boto3.client('rekognition')
 
